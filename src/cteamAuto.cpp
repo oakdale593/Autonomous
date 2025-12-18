@@ -103,6 +103,113 @@ void intake(int n){
 	}
 };
 
+// Driver Movement
+void driverMove(){
+	rightMotors.move(200);
+	leftMotors.move(200);
+
+	leftMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_BRAKE);
+	rightMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_BRAKE);
+
+	while(true){
+		rightmotors.move_velocity();
+		leftmotors.move_velocity();
+	};
+};
+
+// Driver Intake/Outtake Pistons
+void drvierPiston(){
+	int outtakePVar = 0.0;
+	int intakePVar = 0.0;
+
+	outtakeP.retract();
+	intakeP.retract();
+
+	if (Controller1.ButtonDown.pressing()) {
+      outtakePVar = outtakePVar + 1.0;
+      if (outtakePVar == 1.0) {
+        OuttakeP.extend();
+      }
+      else {
+        OuttakeP.retract();
+        outtakePVar = 0.0;
+      }
+      waitUntil((!Controller1.ButtonDown.pressing()));
+    } else if (Controller1.ButtonB.pressing()) {
+      intakePVar = intakePVar + 1.0;
+      if (intakePVar == 1.0) {
+        IntakeP.extend();
+      }
+      else {
+        IntakeP.retract();
+        intakePVar = 0.0;
+      }
+      waitUntil((!Controller1.ButtonB.pressing()));
+    };
+  };
+};
+
+// Driver Intake/Outtake Motors
+float intake = 0.0;
+float outtake = 0.0;
+
+void driverScoringM(){
+	while (true) {
+    if (Controller1.ButtonR2.pressing()) {
+      if (intake == 0.0) {
+        intake = 1.0;
+      }
+      else {
+        intake = 0.0;
+      }
+      waitUntil((!Controller1.ButtonR2.pressing()));
+    } else if (Controller1.ButtonR1.pressing()) {
+      if (intake == 0.0) {
+        intake = 2.0;
+      }
+      else {
+        intake = 0.0;
+      }
+      waitUntil((!Controller1.ButtonR1.pressing()));
+    } else if (Controller1.ButtonL2.pressing()) {
+      if (outtake == 0.0) {
+        outtake = 1.0;
+      }
+      else {
+        outtake = 0.0;
+      }
+      waitUntil((!Controller1.ButtonL2.pressing()));
+    } else if (Controller1.ButtonL1.pressing()) {
+      if (outtake == 0.0) {
+        outtake = 2.0;
+      }
+      else {
+        outtake = 0.0;
+      }
+      waitUntil((!Controller1.ButtonL1.pressing()));
+    };
+  };
+};
+
+void driverScoringMotors(){
+	Intake.spin(forward);
+  	Outtake.spin(forward);
+		while (true) {
+		if (intake == 1.0) {
+			intakeMotor.move_velocity(100.0);
+    	} else if (intake == 2.0) {
+     		 intakeMotor.move_velocity(-100.0);
+    	} else if (outtake == 1.0) {
+      		outtakeMotor.move_velocity(100.0);
+    	} else if (outtake == 2.0) {
+      		outtakeMotor.move_velocity(-100.0);
+    	} else {
+      		intakeMotor.move_velocity(0.0);
+      		outtakeMotor.move_velocity(0.0);
+    };
+  };
+};
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
