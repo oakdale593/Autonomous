@@ -334,5 +334,8 @@ void autonomous() {
 
 //Driver Controls
 void opcontrol() {
-    
+    pros::Task ws1(driverPiston);
+	pros::Task ws2(driverScoringMotors);
+	pros::Task ws3(driverScoringM);
+	driverMove();
 };
