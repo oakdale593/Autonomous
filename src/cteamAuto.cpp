@@ -112,8 +112,9 @@ void driverMove(){
 	rightMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_BRAKE);
 
 	while(true){
-		rightmotors.move_velocity();
-		leftmotors.move_velocity();
+		rightMotors.move_velocity((controller.get_analog(ANALOG_LEFT_Y)*1.575) - (controller.get_analog(ANALOG_RIGHT_X)*1.575));
+		leftMotors.move_velocity((controller.get_analog(ANALOG_LEFT_Y)*1.575) + (controller.get_analog(ANALOG_RIGHT_X)*1.575));
+		pros::delay(2);
 	};
 };
 
@@ -125,7 +126,8 @@ void drvierPiston(){
 	outtakeP.retract();
 	intakeP.retract();
 
-	if (Controller1.ButtonDown.pressing()) {
+	while(true){
+	if (controller.get_digital_new_press(DIGITAL_DOWN)) {
       outtakePVar = outtakePVar + 1.0;
       if (outtakePVar == 1.0) {
         OuttakeP.extend();
@@ -134,8 +136,8 @@ void drvierPiston(){
         OuttakeP.retract();
         outtakePVar = 0.0;
       }
-      waitUntil((!Controller1.ButtonDown.pressing()));
-    } else if (Controller1.ButtonB.pressing()) {
+      waitUntil(!controller.get_digital_new_press(DIGITAL_DOWN));
+    } else if (controller.get_digital_new_press(DIGITAL_B)) {
       intakePVar = intakePVar + 1.0;
       if (intakePVar == 1.0) {
         IntakeP.extend();
@@ -144,9 +146,9 @@ void drvierPiston(){
         IntakeP.retract();
         intakePVar = 0.0;
       }
-      waitUntil((!Controller1.ButtonB.pressing()));
+      waitUntil(!controller.get_digital_new_press(DIGITAL_B));
     };
-  };
+	};
 };
 
 // Driver Intake/Outtake Motors
@@ -155,38 +157,38 @@ float outtake = 0.0;
 
 void driverScoringM(){
 	while (true) {
-    if (Controller1.ButtonR2.pressing()) {
+    if (controller.get_digital_new_press(DIGITAL_R2)) {
       if (intake == 0.0) {
         intake = 1.0;
       }
       else {
         intake = 0.0;
       }
-      waitUntil((!Controller1.ButtonR2.pressing()));
-    } else if (Controller1.ButtonR1.pressing()) {
+      waitUntil(!controller.get_digital_new_press(DIGITAL_R2));
+    } else if (controller.get_digital_new_press(DIGITAL_R1)) {
       if (intake == 0.0) {
         intake = 2.0;
       }
       else {
         intake = 0.0;
       }
-      waitUntil((!Controller1.ButtonR1.pressing()));
-    } else if (Controller1.ButtonL2.pressing()) {
+      waitUntil(!controller.get_digital_new_press(DIGITAL_R1));
+    } else if (controller.get_digital_new_press(DIGITAL_L2)) {
       if (outtake == 0.0) {
         outtake = 1.0;
       }
       else {
         outtake = 0.0;
       }
-      waitUntil((!Controller1.ButtonL2.pressing()));
-    } else if (Controller1.ButtonL1.pressing()) {
+      waitUntil(!controller.get_digital_new_press(DIGITAL_L2));
+    } else if (controller.get_digital_new_press(DIGITAL_L1)) {
       if (outtake == 0.0) {
         outtake = 2.0;
       }
       else {
         outtake = 0.0;
       }
-      waitUntil((!Controller1.ButtonL1.pressing()));
+      waitUntil(!controller.get_digital_new_press(DIGITAL_L1));
     };
   };
 };
@@ -243,14 +245,8 @@ void initialize() {
     });
 };
 
-/**
- * Runs while the robot is disabled
- */
 void disabled() {}
 
-/**
- * runs after initialize if the robot is connected to field control
- */
 void competition_initialize() {}
 
 // get a path used for pure pursuit
@@ -336,19 +332,7 @@ void autonomous() {
 
 };
 
-/**
- * Runs in driver control
- */
+//Driver Controls
 void opcontrol() {
-    // controller
-    // loop to continuously update motors
-    while (true) {
-        // get joystick positions
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        // move the chassis with curvature drive
-        chassis.arcade(leftY, rightX);
-        // delay to save resources
-        pros::delay(10);
-    }
+    
 };
