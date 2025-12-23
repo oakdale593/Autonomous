@@ -329,7 +329,7 @@ void autoLeft(){
 
 void autonomous() {
 	//chassis.follow(example_txt, inch to look forward, secs how long to run)
-
+	rightMotors.move_relative(39.5,50);
 };
 
 //Driver Controls
